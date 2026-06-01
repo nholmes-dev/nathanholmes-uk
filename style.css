@@ -102,3 +102,14 @@ em {
     color: #94a3b8;
     font-style: normal;
 }
+/* Footer Customization */
+footer {
+    padding: 1rem 0 2rem 0;
+    text-align: center;
+}
+
+footer p {
+    font-size: 0.85rem;
+    color: #64748b; /* Muted gray text */
+    margin: 0;
+}
