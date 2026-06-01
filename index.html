@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nathan Holmes | DevOps Portfolio</title>
     <link rel="icon" type="image/png" href="faviconNew.png">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -23,14 +23,29 @@
             <h2>DevOps & Cloud Engineering Portfolio</h2>
             
             <h3>About Me</h3>
-            <p>Welcome! I am a software consultant transitioning my expertise deeper into systems automation, CI/CD pipelines, and cloud infrastructure platforms.</p>
+            <p>Welcome! I am a software consultant transitioning my expertise deeper into systems automation, CI/CD pipelines, and cloud infrastructure platforms.[cite: 4] I specialize in bridging the gap between legacy frameworks and modern, cloud-native operational environments.</p>
                 
             <h3>Core Technical Focus</h3>
             <ul>
-                <li>Continuous Integration & Deployment (CI/CD)</li>
-                <li>Cloud Infrastructure & Networking</li>
-                <li>Automated Build Pipelines</li>
+                <li>Continuous Integration & Deployment (CI/CD)[cite: 4]</li>
+                <li>Cloud Infrastructure & Networking[cite: 4]</li>
+                <li>Automated Build Pipelines[cite: 4]</li>
             </ul>
+
+            <!-- Expanded Engineering Showcase Section -->
+            <section id="architecture">
+                <h2>Architecture: How & Why This Site Is Built</h2>
+                
+                <h3>Strategic Intent</h3>
+                <p>This portfolio is deliberately designed not just as a static CV, but as a living engineering laboratory. The objective of this project is to gain hands-on mastery over production-grade GitOps workflows, automated release pipelines, and edge network delivery. By treating personal infrastructure with the same rigorous compliance and automation standards required in enterprise cloud operations, it serves as a practical testing ground for my ongoing systems engineering studies.</p>
+                
+                <h3>The CI/CD Pipeline & Infrastructure Architecture</h3>
+                <ul>
+                    <li><strong>Immutable Version Control:</strong> Managed completely via GitHub using a branch-protection and feature-isolation workflow.[cite: 3] Code changes, layout enhancements, and configuration updates are strictly tested on isolated preview branches before being integrated into production, mirroring enterprise release gates.</li>
+                    <li><strong>Event-Driven Automation:</strong> Fully integrated with <strong>Cloudflare Pages</strong> using secure webhook notifications. Pushing verified code to the repository automatically triggers an isolated, short-lived build container that autonomously compiles, validates, and provisions the static application assets.</li>
+                    <li><strong>Edge Network Delivery & Security:</strong> DNS zone management and traffic routing are fully optimized through Cloudflare's global edge network. The platform utilizes automated edge SSL/TLS encryption, automated cache management, and localized low-latency routing to serve the application globally under the custom domains <code>nathanholmes.uk</code> and <code>www.nathanholmes.uk</code>.</li>
+                </ul>
+            </section>
         </main>
     </div>
 </body>
