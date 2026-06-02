@@ -132,6 +132,7 @@
 <body>
     <div class="container">
         <script src="nav.js"></script>
+        <main>
             <!-- Scoreboard Display -->
             <div class="scoreboard">
                 <div>
@@ -139,7 +140,7 @@
                     <input type="text" id="p1-name" class="player-name-input" value="Player 1" oninput="syncActionLabels()">
                     <div class="player-score" id="p1-display">0</div>
                     
-                    <!-- Frame Counter UI -->
+                    <!-- Frame Counter UI (Kept manual +/- buttons as an option/override) -->
                     <div class="frame-counter">
                         <button class="frame-btn" onclick="adjustFrames(1, -1)">-</button>
                         <span>Frames: <strong id="p1-frames" style="color: white;">0</strong></span>
@@ -151,7 +152,7 @@
                     <input type="text" id="p2-name" class="player-name-input" value="Player 2" oninput="syncActionLabels()">
                     <div class="player-score" id="p2-display">0</div>
                     
-                    <!-- Frame Counter UI -->
+                    <!-- Frame Counter UI (Kept manual +/- buttons as an option/override) -->
                     <div class="frame-counter">
                         <button class="frame-btn" onclick="adjustFrames(2, -1)">-</button>
                         <span>Frames: <strong id="p2-frames" style="color: white;">0</strong></span>
@@ -195,7 +196,7 @@
             </div>
 
             <div class="action-container">
-                <button class="action-btn" onclick="resetFrame()">Reset Frame</button>
+                <button class="action-btn" onclick="endFrame()">End Frame</button>
                 <button class="action-btn reset-match-btn" onclick="resetMatch()">Reset Match</button>
             </div>
         </main>
@@ -262,23 +263,59 @@
             }
         }
 
-        // Clear only point stats when shifting frames
-        function resetFrame() {
-            p1Score = 0;
-            p2Score = 0;
-            currentBreak = 0;
-            lastPlayer = 0;
-            document.getElementById('p1-display').innerText = 0;
-            document.getElementById('p2-display').innerText = 0;
-            document.getElementById('current-break').innerText = 0;
+        // Calculates winner, awards the frame, and safely prepares the table for the next frame
+        function endFrame() {
+            const name1 = document.getElementById('p1-name').value.trim() || "Player 1";
+            const name2 = document.getElementById('p2-name').value.trim() || "Player 2";
+
+            // Edge check: Don't do anything if no points have been scored
+            if (p1Score === 0 && p2Score === 0) {
+                alert("No scores have been recorded for this frame yet.");
+                return;
+            }
+
+            let winnerName = "";
+            let winningPlayerNumber = 0;
+
+            if (p1Score > p2Score) {
+                winnerName = name1;
+                winningPlayerNumber = 1;
+            } else if (p2Score > p1Score) {
+                winnerName = name2;
+                winningPlayerNumber = 2;
+            } else {
+                alert("The score is currently a tie! Resolve the tie breaker (re-spotted black) before ending the frame.");
+                return;
+            }
+
+            // Quick native confirmation layout to protect accidental click telemetry loss
+            if (confirm(`End this frame and automatically award it to ${winnerName}?`)) {
+                // Tick up the frame tracker
+                adjustFrames(winningPlayerNumber, 1);
+                
+                // Reset frame scores down to zero
+                p1Score = 0;
+                p2Score = 0;
+                currentBreak = 0;
+                lastPlayer = 0;
+                document.getElementById('p1-display').innerText = 0;
+                document.getElementById('p2-display').innerText = 0;
+                document.getElementById('current-break').innerText = 0;
+            }
         }
 
         // Wipe clean including total match metrics
         function resetMatch() {
             if (confirm("Are you sure you want to reset the full match metrics?")) {
-                resetFrame();
+                p1Score = 0;
+                p2Score = 0;
                 p1Frames = 0;
                 p2Frames = 0;
+                currentBreak = 0;
+                lastPlayer = 0;
+                document.getElementById('p1-display').innerText = 0;
+                document.getElementById('p2-display').innerText = 0;
+                document.getElementById('current-break').innerText = 0;
                 document.getElementById('p1-frames').innerText = 0;
                 document.getElementById('p2-frames').innerText = 0;
                 document.getElementById('p1-name').value = "Player 1";
