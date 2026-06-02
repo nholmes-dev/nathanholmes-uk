@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Portfolio | Nathan Holmes</title>
+    <link rel="icon" type="image/png" href="faviconNew.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Project Showcase Card Styles */
+        .project-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+            border-color: #38bdf8;
+        }
+        .project-meta {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 15px 0;
+            flex-wrap: wrap;
+        }
+        .project-btn {
+            display: inline-block;
+            background-color: #0284c7;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+        .project-btn:hover {
+            background-color: #0369a1;
+            text-decoration: none;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <!-- Navigation injected automatically by nav.js -->
+        </header>
+        <script src="nav.js"></script>
+        <hr>
+
+        <main>
+            <h1>Engineering Projects & Solutions</h1>
+            <p>A curated log of automated tools, technical infrastructure deployments, and functional applications developed to solve real-world problems.</p>
+
+            <!-- Project Card 1: Snooker Scorecard -->
+            <div class="project-card">
+                <h2>01 / Client-Side Snooker Scorecard Engine</h2>
+                
+                <div class="project-meta">
+                    <code>HTML5</code>
+                    <code>CSS3 Grid</code>
+                    <code>Vanilla JavaScript</code>
+                    <code>Mobile-First UX</code>
+                </div>
+
+                <p>An interactive, mobile-responsive telemetry tool engineered to track frame scores, consecutive break accumulations, and foul penalties straight from the table edge. Built entirely serverless to eliminate infrastructure overhead and ensure instantaneous response times on remote networks.</p>
+                
+                <p><strong>Core Architecture Highlights:</strong> Implements real-time dynamic state-tracking algorithms to compute continuous frame runs, turn switching context, and opposite-player penalty routing upon foul calculation.</p>
+                
+                <a href="scorecard.html" class="project-btn">Launch Application &rarr;</a>
+            </div>
+
+            <!-- Project Card 2: Placeholder for Future Work -->
+            <div class="project-card" style="border-style: dashed; opacity: 0.6;">
+                <h2>02 / Automated Infrastructure Pipeline (Coming Soon)</h2>
+                <div class="project-meta">
+                    <code>GitHub Actions</code>
+                    <code>Cloudflare DNS</code>
+                    <code>CI/CD</code>
+                </div>
+                <p>A technical write-up detailing the GitOps automation powering this entire domain, focusing on branch-protection schemes and edge-network caching policies.</p>
+            </div>
+        </main>
+
+        <hr>
+        <footer>
+            <p>&copy; 2026 Nathan Holmes. Engineered with automated GitOps infrastructure.</p>
+        </footer>
+    </div>
+</body>
+</html>
