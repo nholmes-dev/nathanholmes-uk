@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NH | Snooker Scorecard</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
@@ -18,12 +18,56 @@
             margin: 20px 0;
             text-align: center;
         }
+        
+        /* Transparent text fields for names */
+        .player-name-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px dashed #475569;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            width: 85%;
+            margin-bottom: 5px;
+        }
+        .player-name-input:focus {
+            outline: none;
+            border-bottom-color: #38bdf8;
+        }
+
         .player-score {
             font-size: 3rem;
             font-weight: bold;
             color: #38bdf8;
-            margin: 10px 0;
+            margin: 5px 0;
         }
+
+        /* Mobile-friendly frame count rows */
+        .frame-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .frame-btn {
+            background-color: #334155;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .frame-btn:active { transform: scale(0.9); }
+
         .break-tracker {
             text-align: center;
             background: #0f172a;
@@ -65,6 +109,11 @@
         .black { background-color: #000; border: 1px solid #334155; }
         .foul { background-color: #475569; }
         
+        .action-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
         .action-btn {
             background-color: #0284c7;
             color: white;
@@ -73,23 +122,41 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 1rem;
-            width: 100%;
-            margin-top: 20px;
+            flex: 1;
+        }
+        .reset-match-btn {
+            background-color: #475569;
         }
     </style>
 </head>
 <body>
     <div class="container">
-<script src="nav.js"></script>
+        <script src="nav.js"></script>
             <!-- Scoreboard Display -->
             <div class="scoreboard">
                 <div>
-                    <h3>Player 1</h3>
+                    <!-- Editable Name Fields -->
+                    <input type="text" id="p1-name" class="player-name-input" value="Player 1" oninput="syncActionLabels()">
                     <div class="player-score" id="p1-display">0</div>
+                    
+                    <!-- Frame Counter UI -->
+                    <div class="frame-counter">
+                        <button class="frame-btn" onclick="adjustFrames(1, -1)">-</button>
+                        <span>Frames: <strong id="p1-frames" style="color: white;">0</strong></span>
+                        <button class="frame-btn" onclick="adjustFrames(1, 1)">+</button>
+                    </div>
                 </div>
                 <div>
-                    <h3>Player 2</h3>
+                    <!-- Editable Name Fields -->
+                    <input type="text" id="p2-name" class="player-name-input" value="Player 2" oninput="syncActionLabels()">
                     <div class="player-score" id="p2-display">0</div>
+                    
+                    <!-- Frame Counter UI -->
+                    <div class="frame-counter">
+                        <button class="frame-btn" onclick="adjustFrames(2, -1)">-</button>
+                        <span>Frames: <strong id="p2-frames" style="color: white;">0</strong></span>
+                        <button class="frame-btn" onclick="adjustFrames(2, 1)">+</button>
+                    </div>
                 </div>
             </div>
 
@@ -102,7 +169,7 @@
             <div class="controls-grid">
                 <!-- Player 1 Column -->
                 <div class="ball-buttons">
-                    <h4>Player 1 Actions</h4>
+                    <h4 id="p1-action-header">Player 1 Actions</h4>
                     <button class="ball-btn red" onclick="addScore(1, 1)">Red (1)</button>
                     <button class="ball-btn yellow" onclick="addScore(1, 2)">Yellow (2)</button>
                     <button class="ball-btn green" onclick="addScore(1, 3)">Green (3)</button>
@@ -115,7 +182,7 @@
 
                 <!-- Player 2 Column -->
                 <div class="ball-buttons">
-                    <h4>Player 2 Actions</h4>
+                    <h4 id="p2-action-header">Player 2 Actions</h4>
                     <button class="ball-btn red" onclick="addScore(2, 1)">Red (1)</button>
                     <button class="ball-btn yellow" onclick="addScore(2, 2)">Yellow (2)</button>
                     <button class="ball-btn green" onclick="addScore(2, 3)">Green (3)</button>
@@ -127,7 +194,10 @@
                 </div>
             </div>
 
-            <button class="action-btn" onclick="resetFrame()">Reset Frame</button>
+            <div class="action-container">
+                <button class="action-btn" onclick="resetFrame()">Reset Frame</button>
+                <button class="action-btn reset-match-btn" onclick="resetMatch()">Reset Match</button>
+            </div>
         </main>
     </div>
 
@@ -135,11 +205,20 @@
     <script>
         let p1Score = 0;
         let p2Score = 0;
+        let p1Frames = 0;
+        let p2Frames = 0;
         let currentBreak = 0;
         let lastPlayer = 0;
 
+        // Dynamic Label Syncer
+        function syncActionLabels() {
+            const name1 = document.getElementById('p1-name').value.trim() || "Player 1";
+            const name2 = document.getElementById('p2-name').value.trim() || "Player 2";
+            document.getElementById('p1-action-header').innerText = name1 + " Actions";
+            document.getElementById('p2-action-header').innerText = name2 + " Actions";
+        }
+
         function addScore(player, points) {
-            // If the player changes, reset the current break counter
             if (lastPlayer !== 0 && lastPlayer !== player) {
                 currentBreak = 0;
             }
@@ -161,9 +240,8 @@
         function foul(foulingPlayer) {
             currentBreak = 0;
             document.getElementById('current-break').innerText = currentBreak;
-            lastPlayer = 0; // Reset turn context on foul
+            lastPlayer = 0;
 
-            // Points go to the opposite player
             if (foulingPlayer === 1) {
                 p2Score += 4;
                 document.getElementById('p2-display').innerText = p2Score;
@@ -173,6 +251,18 @@
             }
         }
 
+        // Frame Increment/Decrement Logic
+        function adjustFrames(player, val) {
+            if (player === 1) {
+                p1Frames = Math.max(0, p1Frames + val);
+                document.getElementById('p1-frames').innerText = p1Frames;
+            } else {
+                p2Frames = Math.max(0, p2Frames + val);
+                document.getElementById('p2-frames').innerText = p2Frames;
+            }
+        }
+
+        // Clear only point stats when shifting frames
         function resetFrame() {
             p1Score = 0;
             p2Score = 0;
@@ -181,6 +271,20 @@
             document.getElementById('p1-display').innerText = 0;
             document.getElementById('p2-display').innerText = 0;
             document.getElementById('current-break').innerText = 0;
+        }
+
+        // Wipe clean including total match metrics
+        function resetMatch() {
+            if (confirm("Are you sure you want to reset the full match metrics?")) {
+                resetFrame();
+                p1Frames = 0;
+                p2Frames = 0;
+                document.getElementById('p1-frames').innerText = 0;
+                document.getElementById('p2-frames').innerText = 0;
+                document.getElementById('p1-name').value = "Player 1";
+                document.getElementById('p2-name').value = "Player 2";
+                syncActionLabels();
+            }
         }
     </script>
 </body>
