@@ -140,7 +140,6 @@ code {
     justify-content: space-between;
     align-items: center;
     padding: 15px 0;
-    border-bottom: 1px solid #1e293b; /* Replaces old bottom border rule if necessary */
     margin-bottom: 25px;
 }
 
@@ -150,7 +149,7 @@ code {
 }
 
 #main-logo {
-    height: 80px; /* Constrains the logo height cleanly */
+    height: 120px; /* Constrains the logo height cleanly */
     width: auto;  /* Maintains proper image proportions */
     display: block;
 }
